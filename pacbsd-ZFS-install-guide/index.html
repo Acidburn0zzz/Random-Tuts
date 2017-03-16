@@ -57,8 +57,16 @@
                     <br/>
                     <code>vi /etc/pacman.conf</code>
                     <br/>
+                    <b>Or you can can do it the easy way (no <code>vi</code>):</b>
                     <br/>
-                    <b>Once done fiddling with vi, you can begin the install:</b>
+                    <code>curl -O https://nobabs27.github.io/Random-Tuts/pacbsd-ZFS-install-guide/pacman.conf</code>
+                    <br/>
+                    <code>rm /etc/pacman.conf</code>
+                    <br/>
+                    <code>mv pacman.conf /etc</code>
+                    <br/>
+                    <br/>
+                    <b>You can now begin the install:</b>
                     <br/>
                     <code>pacstrap /mnt base base-devel</code>
                     <br/>
