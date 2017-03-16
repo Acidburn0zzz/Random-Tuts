@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-    <html>
+    <html lang="en">
         <head>
             <title>PacBSD Install</title>
             <meta charset="utf-8"/>
@@ -50,7 +50,6 @@
                     <code>zfs create -o canmount=off -o mountpoint=legacy tank/ROOT</code>
                     <br/>
                     <code>zfs create -o canmount=on -o compression=lz4 -o mountpoint=/ tank/ROOT/pacbsd</code>
-                    </code>
                     <br/>
                     <br/>
                     <b>Set <code>SigLevel = Never</code> in <code>/etc/pacman.conf</code> (you can't install another editor sadly):</b>
