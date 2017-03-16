@@ -7,176 +7,178 @@
         </head>
         <body>
             <h1>PacBSD ZFS Install:</h1>
-            <p>
-                <b>Get some info about the HD/SSD:</b>
-                    <br/>
-                    <code>geom disk list</code>
-                    <br/>
-                    <b>or</b>
-                    <br/>
-                    <code>gpart list <i>adaX</i> | less</code>
-                    <br/>
-                    <br/>
-                    <b>If you need to erase the disk:</b>
-                    <br/>
-                    <code>gpart destroy -F ada0</code>
-                    <br/>
-                    <br/>
-                    <b>Setup FileSystem (BIOS/MBR):</b>
-                    <br/>
-                    <code>gpart create -s mbr ada0</code>
-                    <br/>
-                    <code>gpart add -t freebsd ada0</code>
-                    <br/>
-                    <code>gpart create -s BSD ada0s1</code>
-                    <br/>
-                    <br/>
-                    <b>Setup FileSystem (UEFI/GPT):</b>
-                    <br/>
-                    <code>gpart create -s gpt ada0<br/></code>
-                    <code>gpart add -s 64k -t freebsd-boot ada0</code>
-                    <br/>
-                    <br/>
-                    <b>Setup ZFS:</b>
-                    <br/>
-                    <code>gpart add -s <i>size</i> -t freebsd-zfs ada0s1</code>
-                    <br/>
-                    <code>zpool create tank /dev/<i>ada0sXX</i></code>
-                    <br/>
-                    <code>zpool export tank</code>
-                    <br/>
-                    <code>zpool import -o altroot=/mnt tank</code>
-                    <br/>
-                    <code>zfs create -o canmount=off -o mountpoint=legacy tank/ROOT</code>
-                    <br/>
-                    <code>zfs create -o canmount=on -o compression=lz4 -o mountpoint=/ tank/ROOT/pacbsd</code>
-                    <br/>
-                    <br/>
-                    <b>Set <code>SigLevel = Never</code> in <code>/etc/pacman.conf</code> (you can't install another editor sadly):</b>
-                    <br/>
-                    <code>vi /etc/pacman.conf</code>
-                    <br/>
-                    <b>Or you can can do it the easy way (no <code>vi</code>):</b>
-                    <br/>
-                    <code>curl -O https://nobabs27.github.io/Random-Tuts/pacbsd-ZFS-install-guide/pacman.conf</code>
-                    <br/>
-                    <code>rm /etc/pacman.conf</code>
-                    <br/>
-                    <code>mv pacman.conf /etc</code>
-                    <br/>
-                    <br/>
-                    <b>You can now begin the install:</b>
-                    <br/>
-                    <code>pacstrap /mnt base base-devel</code>
-                    <br/>
-                    <br/>
-                    <b>Chroot in:</b>
-                    <br/>
-                    <code>arch-chroot /mnt</code>
-                    <br/>
-                    <br/>
-                    <b>Add this to to <code>/boot/loader.conf</code> with <code>vi</code>:</b>
-                    <br/>
-                    <code>zfs_load="YES"</code>
-                    <br/>
-                    <code>vfs.root.mountfrom="zfs:tank/ROOT/pacbsd"</code>
-                    <br/>
-                    <br/>
-                    <b>Check your <code>/etc/fstab</code> so it looks like this with <code>vi</code></b>:
-                    <br/>
-                    <code>/dev/ada0p2      none        swap   sw 0 0</code>
-                    <br/>
-                    <code>/dev/ada0p3      /           ufs    rw 1 1</code>
-                    <br/>
-                    <br/>
-                    <b>Enable ZFS Service (FreeBSD Init)</b>:
-                    <br/>
-                    <code>sysrc zfs_enable="YES"</code>
-                    <br/>
-                    <br/>
-                    <b>Set TimeZone:</b>
-                    <br/>
-                    <code>ln -s /usr/share/zoneinfo/<i>zone/subzone</i> /etc/localtime</code>
-                    <br/>
-                    <br/>
-                    <b>Set hostname (FreeBSD Init):</b>
-                    <br/>
-                    <code>sysrc hostname="hostname"</code>
-                    <br/>
-                    <br/>
-                    <b>Do this to /etc/login.conf with <code>vi</code>:</b>
-                    <br/>
-                    <code>
-                        --- /usr/src/etc/login.conf     2011-03-10 13:48:59.000000000 -0800
+            <div>
+                <p>
+                    <b>Get some info about the HD/SSD:</b>
                         <br/>
-                        +++ /etc/login.conf     2011-05-08 16:44:01.000000000 -0700
+                        <code>geom disk list</code>
                         <br/>
-                        @@ -26,7 +26,7 @@
+                        <b>or</b>
                         <br/>
-                        :passwd_format=md5:\
+                        <code>gpart list <i>adaX</i> | less</code>
                         <br/>
-                        :copyright=/etc/COPYRIGHT:\
                         <br/>
-                        :welcome=/etc/motd:\
+                        <b>If you need to erase the disk:</b>
                         <br/>
-                        -       :setenv=MAIL=/var/mail/$,BLOCKSIZE=K,FTP_PASSIVE_MODE=YES:\
+                        <code>gpart destroy -F ada0</code>
                         <br/>
-                        + :setenv=MAIL=/var/mail/$,BLOCKSIZE=K,FTP_PASSIVE_MODE=YES,LC_COLLATE=C:\
                         <br/>
-                        :path=/sbin /bin /usr/sbin /usr/bin /usr/games /usr/local/sbin /usr/local/bin ~/bin:\
+                        <b>Setup FileSystem (BIOS/MBR):</b>
                         <br/>
-                        :nologin=/var/run/nologin:\
+                        <code>gpart create -s mbr ada0</code>
                         <br/>
-                        :cputime=unlimited:\
+                        <code>gpart add -t freebsd ada0</code>
                         <br/>
-                        @@ -44,7 +44,9 @@
+                        <code>gpart create -s BSD ada0s1</code>
                         <br/>
-                        :pseudoterminals=unlimited:\
                         <br/>
-                        :priority=0:\
+                        <b>Setup FileSystem (UEFI/GPT):</b>
                         <br/>
-                        :ignoretime@:\
+                        <code>gpart create -s gpt ada0<br/></code>
+                        <code>gpart add -s 64k -t freebsd-boot ada0</code>
                         <br/>
-                        -       :umask=022:
                         <br/>
-                        +       :umask=022:\
+                        <b>Setup ZFS:</b>
                         <br/>
-                        +       :charset=UTF-8:\
+                        <code>gpart add -s <i>size</i> -t freebsd-zfs ada0s1</code>
                         <br/>
-                        +       :lang=en_US.UTF-8:
-                    </code>
-                    <br/>
-                    <br/>
-                    <b>Then do this:</b>
-                    <br/>
-                    <code>cap_mkdb /etc/login.conf</code>
-                    <br/>
-                    <br/>
-                    <b>Set the password for root and exit:</b>
-                    <br/>
-                    <code>passwd root</code>
-                    <br/>
-                    <br/>
-                    <b>Exit (Ctrl+D) and <code>reboot</code>....and hope it works.... xD</b>
-            </p>
+                        <code>zpool create tank /dev/<i>ada0sXX</i></code>
+                        <br/>
+                        <code>zpool export tank</code>
+                        <br/>
+                        <code>zpool import -o altroot=/mnt tank</code>
+                        <br/>
+                        <code>zfs create -o canmount=off -o mountpoint=legacy tank/ROOT</code>
+                        <br/>
+                        <code>zfs create -o canmount=on -o compression=lz4 -o mountpoint=/ tank/ROOT/pacbsd</code>
+                        <br/>
+                        <br/>
+                        <b>Set <code>SigLevel = Never</code> in <code>/etc/pacman.conf</code> (you can't install another editor sadly):</b>
+                        <br/>
+                        <code>vi /etc/pacman.conf</code>
+                        <br/>
+                        <b>Or you can can do it the easy way (no <code>vi</code>):</b>
+                        <br/>
+                        <code>curl -O https://nobabs27.github.io/Random-Tuts/pacbsd-ZFS-install-guide/pacman.conf</code>
+                        <br/>
+                        <code>rm /etc/pacman.conf</code>
+                        <br/>
+                        <code>mv pacman.conf /etc</code>
+                        <br/>
+                        <br/>
+                        <b>You can now begin the install:</b>
+                        <br/>
+                        <code>pacstrap /mnt base base-devel</code>
+                        <br/>
+                        <br/>
+                        <b>Chroot in:</b>
+                        <br/>
+                        <code>arch-chroot /mnt</code>
+                        <br/>
+                        <br/>
+                        <b>Add this to to <code>/boot/loader.conf</code> with <code>vi</code>:</b>
+                        <br/>
+                        <code>zfs_load="YES"</code>
+                        <br/>
+                        <code>vfs.root.mountfrom="zfs:tank/ROOT/pacbsd"</code>
+                        <br/>
+                        <br/>
+                        <b>Check your <code>/etc/fstab</code> so it looks like this with <code>vi</code></b>:
+                        <br/>
+                        <code>/dev/ada0p2      none        swap   sw 0 0</code>
+                        <br/>
+                        <code>/dev/ada0p3      /           ufs    rw 1 1</code>
+                        <br/>
+                        <br/>
+                        <b>Enable ZFS Service (FreeBSD Init)</b>:
+                        <br/>
+                        <code>sysrc zfs_enable="YES"</code>
+                        <br/>
+                        <br/>
+                        <b>Set TimeZone:</b>
+                        <br/>
+                        <code>ln -s /usr/share/zoneinfo/<i>zone/subzone</i> /etc/localtime</code>
+                        <br/>
+                        <br/>
+                        <b>Set hostname (FreeBSD Init):</b>
+                        <br/>
+                        <code>sysrc hostname="hostname"</code>
+                        <br/>
+                        <br/>
+                        <b>Do this to /etc/login.conf with <code>vi</code>:</b>
+                        <br/>
+                        <code>
+                            --- /usr/src/etc/login.conf     2011-03-10 13:48:59.000000000 -0800
+                            <br/>
+                            +++ /etc/login.conf     2011-05-08 16:44:01.000000000 -0700
+                            <br/>
+                            @@ -26,7 +26,7 @@
+                            <br/>
+                            :passwd_format=md5:\
+                            <br/>
+                            :copyright=/etc/COPYRIGHT:\
+                            <br/>
+                            :welcome=/etc/motd:\
+                            <br/>
+                            -       :setenv=MAIL=/var/mail/$,BLOCKSIZE=K,FTP_PASSIVE_MODE=YES:\
+                            <br/>
+                            + :setenv=MAIL=/var/mail/$,BLOCKSIZE=K,FTP_PASSIVE_MODE=YES,LC_COLLATE=C:\
+                            <br/>
+                            :path=/sbin /bin /usr/sbin /usr/bin /usr/games /usr/local/sbin /usr/local/bin ~/bin:\
+                            <br/>
+                            :nologin=/var/run/nologin:\
+                            <br/>
+                            :cputime=unlimited:\
+                            <br/>
+                            @@ -44,7 +44,9 @@
+                            <br/>
+                            :pseudoterminals=unlimited:\
+                            <br/>
+                            :priority=0:\
+                            <br/>
+                            :ignoretime@:\
+                            <br/>
+                            -       :umask=022:
+                            <br/>
+                            +       :umask=022:\
+                            <br/>
+                            +       :charset=UTF-8:\
+                            <br/>
+                            +       :lang=en_US.UTF-8:
+                        </code>
+                        <br/>
+                        <br/>
+                        <b>Then do this:</b>
+                        <br/>
+                        <code>cap_mkdb /etc/login.conf</code>
+                        <br/>
+                        <br/>
+                        <b>Set the password for root and exit:</b>
+                        <br/>
+                        <code>passwd root</code>
+                        <br/>
+                        <br/>
+                        <b>Exit (Ctrl+D) and <code>reboot</code>....and hope it works.... xD</b>
+                </p>
+            </div>
+            <div>
+                <br/>
+                <br/>
+                <h2>Credit stuff:</h2>
+                <p>
+                Source for most of the commands:
+                <br/>
+                <a href="https://wiki.pacbsd.org/ZFS">https://wiki.pacbsd.org/ZFS</a>
+                <br/>
+                <a href="https://wiki.pacbsd.org/Official_Arch_BSD_Install_Guide">https://wiki.pacbsd.org/Official_Arch_BSD_Install_Guide</a>
+                <br/>
+                Site may not load (sometimes when not using a Firefox based web browser?).
+                <br/>
+                Source for the pacman.conf I edited:
+                <a href="https://github.com/PacBSD/abs/blob/master/core/pacman/pacman.conf"> https://github.com/PacBSD/abs/blob/master/core/pacman/pacman.conf</a>
+                <br/>
+                Most of the theme colors were taken from the "Solarized Dark" theme in the Atom text editor.
+                </p>
+            </div>
         </body>
-        <footer>
-            <br/>
-            <br/>
-            <h2>Credit stuff:</h2>
-            <p>
-            Source for most of the commands:
-            <br/>
-            <a href="https://wiki.pacbsd.org/ZFS">https://wiki.pacbsd.org/ZFS</a>
-            <br/>
-            <a href="https://wiki.pacbsd.org/Official_Arch_BSD_Install_Guide">https://wiki.pacbsd.org/Official_Arch_BSD_Install_Guide</a>
-            <br/>
-            Site may not load (sometimes when not using a Firefox based web browser?).
-            <br/>
-            Source for the pacman.conf I edited:
-            <a href="https://github.com/PacBSD/abs/blob/master/core/pacman/pacman.conf"> https://github.com/PacBSD/abs/blob/master/core/pacman/pacman.conf</a>
-            <br/>
-            Most of the theme colors were taken from the "Solarized Dark" theme in the Atom text editor.
-            </p>
-        </footer>
     </html>
