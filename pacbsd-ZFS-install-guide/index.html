@@ -108,7 +108,20 @@
                         <code>sysrc hostname="hostname"</code>
                         <br/>
                         <br/>
-                        <b>Do this to /etc/login.conf with <code>vi</code>:</b>
+                        <b>Let's install nano.  First exit the chroot with Ctrl+D or <code>exit</code>, then:</b>
+                        <br/>
+                        <code>pacstrap /mnt nano</code>
+                        <br/>
+                        <b>Re-enter chroot:</b>
+                        <br/>
+                        <code>arch-chroot /mnt</code>
+                        <br/>
+                        <b>Fix the library thing:</b>
+                        <br/>
+                        <code>ln -s /usr/lib/libncursesw.so /usr/lib/libncursesw.so.6</code>
+                        <br/>
+                        <br/>
+                        <b>Do this to /etc/login.conf with <code>nano</code>:</b>
                         <br/>
                         <code>
                             --- /usr/src/etc/login.conf     2011-03-10 13:48:59.000000000 -0800
@@ -161,7 +174,30 @@
                         <code>passwd root</code>
                         <br/>
                         <br/>
-                        <b>Exit (Ctrl+D) and <code>reboot</code>....and hope it works.... xD</b>
+                        <b>Exit the chroot again (Ctrl+D or <code>exit</code>), set bootfs and unmount tank:</b>
+                        <br/>
+                        <code>zpool import -o altroot=/mnt -f tank</code>
+                        <br/>
+                        <code>zpool set bootfs=tank/ROOT/pacbsd tank</code>
+                        <br/>
+                        <code>zpool export tank</code>
+                        <br/>
+                        <br/>
+                        <b>Make it so it can boot (BIOS/MBR):</b>
+                        <br/>
+                        <code>gpart bootcode -b /boot/boot0 ada0</code>
+                        <br/>
+                        <code>dd if=/boot/zfsboot of=/dev/ada0s1 count=1</code>
+                        <br/>
+                        <code>dd if=/boot/zfsboot of=/dev/ada0s1a skip=1 seek=1024</code>
+                        <br/>
+                        <br/>
+                        <b>Make it so it can boot (UEFI/GPT):</b>
+                        <br/>
+                        <code>gpart bootcode -b /boot/pmbr -p /boot/gptzfsboot -i1 ada0</code>
+                        <br/>
+                        <br/>
+                        <b><code>reboot</code>....and hope it works.... xD</b>
                 </p>
             </div>
             <div>
@@ -173,7 +209,7 @@
                 <br/>
                 <a href="https://wiki.pacbsd.org/ZFS">https://wiki.pacbsd.org/ZFS</a>
                 <br/>
-                <a href="https://wiki.pacbsd.org/Official_Arch_BSD_Install_Guide">https://wiki.pacbsd.org/Official_Arch_BSD_Install_Guide</a>
+                <a href="https://wiki.pacbsd.org/Official_PacBSD_Install_Guide">https://wiki.pacbsd.org/Official_PacBSD_Install_Guide</a>
                 <br/>
                 Site may not load (sometimes when not using a Firefox based web browser?).
                 <br/>
