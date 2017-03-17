@@ -62,6 +62,7 @@
                         <br/>
                         <code>vi /etc/pacman.conf</code>
                         <br/>
+                        <br/>
                         <b>Or you can can do it the easy way (no <code>vi</code>):</b>
                         <br/>
                         <code>curl -O https://nobabs27.github.io/Random-Tuts/pacbsd-ZFS-install-guide/pacman.conf</code>
@@ -86,13 +87,6 @@
                         <code>zfs_load="YES"</code>
                         <br/>
                         <code>vfs.root.mountfrom="zfs:tank/ROOT/pacbsd"</code>
-                        <br/>
-                        <br/>
-                        <b>Check your <code>/etc/fstab</code> so it looks like this with <code>vi</code></b>:
-                        <br/>
-                        <code>/dev/ada0p2      none        swap   sw 0 0</code>
-                        <br/>
-                        <code>/dev/ada0p3      /           ufs    rw 1 1</code>
                         <br/>
                         <br/>
                         <b>Enable ZFS Service (FreeBSD Init)</b>:
