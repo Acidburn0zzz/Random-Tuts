@@ -78,7 +78,7 @@
                         <br/>
                         <b>You can now begin the install:</b>
                         <br/>
-                        <code>pacstrap /mnt base base-devel</code>
+                        <code>pacstrap /mnt base base-devel nano</code>
                         <br/>
                         <br/>
                         <b>Chroot in:</b>
@@ -86,7 +86,12 @@
                         <code>arch-chroot /mnt</code>
                         <br/>
                         <br/>
-                        <b>Add this to to <code>/boot/loader.conf</code> with <code>vi</code>:</b>
+                        <b>Fix the library thing with nano:</b>
+                        <br/>
+                        <code>ln -s /usr/lib/libncursesw.so /usr/lib/libncursesw.so.6</code>
+                        <br/>
+                        <br/>
+                        <b>Add this to to <code>/boot/loader.conf</code> with <code>nano</code>:</b>
                         <br/>
                         <code>zfs_load="YES"</code>
                         <br/>
@@ -106,19 +111,6 @@
                         <b>Set hostname (FreeBSD Init):</b>
                         <br/>
                         <code>sysrc hostname="hostname"</code>
-                        <br/>
-                        <br/>
-                        <b>Let's install nano.  First exit the chroot with Ctrl+D or <code>exit</code>, then:</b>
-                        <br/>
-                        <code>pacstrap /mnt nano</code>
-                        <br/>
-                        <b>Re-enter chroot:</b>
-                        <br/>
-                        <code>arch-chroot /mnt</code>
-                        <br/>
-                        <b>Fix the library thing:</b>
-                        <br/>
-                        <code>ln -s /usr/lib/libncursesw.so /usr/lib/libncursesw.so.6</code>
                         <br/>
                         <br/>
                         <b>Do this to /etc/login.conf with <code>nano</code>:</b>
