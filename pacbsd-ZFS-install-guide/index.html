@@ -118,47 +118,13 @@
                         <code>sysrc hostname="hostname"</code>
                         <br/>
                         <br/>
-                        <b>Do this to /etc/login.conf with <code>nano</code>:</b>
+                        <b>Do this to  /etc/login.conf:</b>
                         <br/>
-                        <code>
-                            --- /usr/src/etc/login.conf     2011-03-10 13:48:59.000000000 -0800
-                            <br/>
-                            +++ /etc/login.conf     2011-05-08 16:44:01.000000000 -0700
-                            <br/>
-                            @@ -26,7 +26,7 @@
-                            <br/>
-                            :passwd_format=md5:\
-                            <br/>
-                            :copyright=/etc/COPYRIGHT:\
-                            <br/>
-                            :welcome=/etc/motd:\
-                            <br/>
-                            -       :setenv=MAIL=/var/mail/$,BLOCKSIZE=K,FTP_PASSIVE_MODE=YES:\
-                            <br/>
-                            + :setenv=MAIL=/var/mail/$,BLOCKSIZE=K,FTP_PASSIVE_MODE=YES,LC_COLLATE=C:\
-                            <br/>
-                            :path=/sbin /bin /usr/sbin /usr/bin /usr/games /usr/local/sbin /usr/local/bin ~/bin:\
-                            <br/>
-                            :nologin=/var/run/nologin:\
-                            <br/>
-                            :cputime=unlimited:\
-                            <br/>
-                            @@ -44,7 +44,9 @@
-                            <br/>
-                            :pseudoterminals=unlimited:\
-                            <br/>
-                            :priority=0:\
-                            <br/>
-                            :ignoretime@:\
-                            <br/>
-                            -       :umask=022:
-                            <br/>
-                            +       :umask=022:\
-                            <br/>
-                            +       :charset=UTF-8:\
-                            <br/>
-                            +       :lang=en_US.UTF-8:
-                        </code>
+                        <code>curl -O https://nobabs27.github.io/Random-Tuts/pacbsd-ZFS-install-guide/login.conf</code>
+                        <br/>
+                        <code>rm /etc/login.conf</code>
+                        <br/>
+                        <code>mv login.conf /etc</code>
                         <br/>
                         <br/>
                         <b>Then do this:</b>
